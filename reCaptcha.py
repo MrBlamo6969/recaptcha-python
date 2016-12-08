@@ -13,6 +13,7 @@ lugo se solicita is_succes(param) y como paramtro se envia lo que recibe el post
 
 import requests
 import sys
+import os
 
 class reCaptcha ():
     def __init__(self,secretKey):
