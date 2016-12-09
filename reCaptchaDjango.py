@@ -94,21 +94,17 @@ def challenge(response):
     :param response:
     :return:
     '''
-
     def challenge_do(func):
         def check_captcha(*args, **kwargs):
-            captcha = reCaptcha()
-            if captcha.is_succes(*args):
+            cap = reCaptcha()
+            if cap.is_succes(*args):
                 return func(*args, **kwargs)
             else:
-
                 if (response == Http404):
                     raise Http404
                 elif response == JsonResponse:
                     return response({'error': 'bad captcha'})
                 else:
                     response
-
         return check_captcha
-
     return challenge_do
