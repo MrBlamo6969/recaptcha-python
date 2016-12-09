@@ -31,7 +31,7 @@ first add the following configuration to the configuration file:
 in settings.py
 
 RECAPTCHA_SECRET_KEY = 'Your secret key'  
-RECAPTCHA_SITE_KEY= 'Your site key
+RECAPTCHA_SITE_KEY= 'Your site key'
 
 
 ```py
