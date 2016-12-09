@@ -7,7 +7,8 @@
 
 '''
 from django.conf import settings
-from . import reCaptcha
+from django.http import JsonResponse, Http404
+import requests
 
 
 class Colors:
@@ -20,18 +21,94 @@ class Colors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-c = Colors()
 
-def reCaptcha():
-    try:
-        return reCaptcha.reCaptcha(settings.RECAPTCHA_SECRET_KEY)
-        print  c.FAIL + ' Tienes que definir en settings ' + c.OKGREEN + 'RECAPTCHA_SECRET_KEY="tu clave"' + c.FAIL
-    except:
-        return None
+class reCaptcha():
+    def __init__(self):
 
-def sitekey():
-    try:
-        return settings.RECAPTCHA_SITE_KEY
-    except:
-        print  c.FAIL + ' Tienes que definir en settings ' + c.OKGREEN + 'RECAPTCHA_SITE_KEY="tu clave"' + c.FAIL
-        return None
+        self.secretKey = settings.RECAPTCHA_SECRET_KEY
+        self.url = 'https://www.google.com/recaptcha/api/siteverify'
+
+    def sitekey(self):
+        try:
+
+            return settings.RECAPTCHA_SITE_KEY
+
+        except:
+            return None
+
+    def __callApi(self, response):
+        try:
+
+            headers = {'User-Agent': 'DebuguearApi-Browser', }
+            payload = {'secret': self.secretKey, 'response': response}
+            r = requests.request(method='POST', url=self.url, headers=headers, data=payload)
+            return r.json()
+
+        except:
+            return False
+
+    def is_succes(self, request):
+        try:
+            captchaResponse = request.POST['g-recaptcha-response']
+        except:
+            return False
+
+        self.data = self.__callApi(captchaResponse)
+
+        if self.data:
+            try:
+                return self.data['success']
+            except:
+                return None
+        else:
+            return None
+
+    def get_error_codes(self):
+        # missing-input-secret	The secret parameter is missing.
+        # invalid-input-secret	The secret parameter is invalid or malformed.
+        # missing-input-response	The response parameter is missing.
+        # invalid-input-response	The response parameter is invalid or malformed.
+        try:
+            return self.data['error-codes']
+        except:
+            return None
+
+    def get_hostname(self):
+        try:
+            return self.data['hostname']
+        except:
+            return None
+
+    def get_challenge_ts(self):
+        # return time stamp
+        try:
+            return self.data['challenge_ts']
+        except:
+            return None
+
+
+def challenge(response):
+    '''
+    decorator just simple do from reCaptchaDjango import challenge
+    then @challenge(Http404) or @challenge(JsonRespose)
+    :param response:
+    :return:
+    '''
+
+    def challenge_do(func):
+        def check_captcha(*args, **kwargs):
+            captcha = reCaptcha()
+            if captcha.is_succes(*args):
+                return func(*args, **kwargs)
+            else:
+
+                if (response == Http404):
+                    raise Http404
+                elif response == JsonResponse:
+                    return response({'error': 'bad captcha'})
+                else:
+                    response
+
+        return check_captcha
+
+    return challenge_do
