@@ -17,14 +17,14 @@ $ pip install requests
 
 ###how to use ?
 ```py
->>> from reCaptcha import reCaptcha
->>> captcha = reCaptcha(secretKey= 'Your Secret Key')
+from reCaptcha import reCaptcha
+captcha = reCaptcha(secretKey= 'Your Secret Key')
 
 # you need the post requests response with the data 
 # supose that the response come in POST
 
->>> data = POST['g-recaptcha-response']
->>> value = captcha.is_succes(data)
+data = POST['g-recaptcha-response']
+value = captcha.is_succes(data)
 ```
 ###how to use with Django?
 first add the following configuration to the configuration file:  
@@ -37,11 +37,11 @@ RECAPTCHA_SITE_KEY= 'Your site key
 ```py
 # initialize de module
 
->>> from reCaptchaDjango import reCaptcha
->>> captcha = reCaptcha()
+from reCaptchaDjango import reCaptcha
+captcha = reCaptcha()
 
 # in your view you need to catch de POST response
 
->>> data = request.POST['g-recaptcha-response']
->>> value = captcha.is_succes(data)
+data = request.POST['g-recaptcha-response']
+value = captcha.is_succes(data)
 ```
