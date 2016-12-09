@@ -23,11 +23,15 @@ class Colors:
 c = Colors()
 
 def reCaptcha():
-    return reCaptcha.reCaptcha(settings.RECAPTCHA_SECRET_KEY)
-
+    try:
+        return reCaptcha.reCaptcha(settings.RECAPTCHA_SECRET_KEY)
+        print  c.FAIL + ' Tienes que definir en settings ' + c.OKGREEN + 'RECAPTCHA_SECRET_KEY="tu clave"' + c.FAIL
+    except:
+        return None
 
 def sitekey():
     try:
         return settings.RECAPTCHA_SITE_KEY
     except:
-        print  c.FAIL + ' Tienes que definir en setting ' + c.OKGREEN + 'RECAPTCHA_SITE_KEY="tu clave"' + c.FAIL
+        print  c.FAIL + ' Tienes que definir en settings ' + c.OKGREEN + 'RECAPTCHA_SITE_KEY="tu clave"' + c.FAIL
+        return None
