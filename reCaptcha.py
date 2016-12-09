@@ -1,4 +1,6 @@
 '''
+    Created by : Cristian Steib
+    date : 8/12/16
 requiere 'requests'
 
 para hacer uso de la api es impresindible primero instanciarla

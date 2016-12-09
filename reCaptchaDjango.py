@@ -1,4 +1,6 @@
 '''
+    Created by : Cristian Steib
+    date : 8/12/16
     necesitas agregar en el setting de tu proyecto lo siguiente:
 
     RECAPTCHA_SECRET_KEY = ' tu clave '
