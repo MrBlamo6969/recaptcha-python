@@ -106,9 +106,9 @@ def challenge(response):
                 elif response == JsonResponse:
                     return response({'status': False,
                                      'error': 'bad captcha',
-                                     'errorType': 150})
+                                     'errorType': 0})
                 else:
-                    response
+                    return response
 
         return check_captcha
 
