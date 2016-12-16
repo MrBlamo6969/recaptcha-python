@@ -35,13 +35,25 @@ RECAPTCHA_SITE_KEY= 'Your site key'
 
 
 ```py
-# initialize de module
 
-from reCaptchaDjango import reCaptcha
-captcha = reCaptcha()
+from django.http import JsonResponse, Http404
+reCaptcha.reCaptchaDjango import challenge
 
-# in your view you need to catch de POST response
+# In the view that you want
 
-data = request.POST['g-recaptcha-response']
-value = captcha.is_succes(data)
+@challenge(Http404)
+def your_view(request):
+    #raise Http404 if the challenge failed  Or not sent by POST
+    pass
+    
+@challenge(JsonRespnse)
+def your_view(request):
+    #return default JsonResonse if the challenge failed  Or not sent by POST
+    pass
+    
+@challenge(JsonRespnse({'create_your':'response'}))
+def your_view(request):
+    #return default JsonResonse if the challenge failed  Or not sent by POST
+    pass
+        
 ```
